@@ -1,0 +1,34 @@
+Create a complete project implementation based on the following specifications:
+
+Project Requirements:
+{prompt}
+
+Technical Stack:
+- Frontend: {frontend_option}
+- Backend: {backend_option}
+- Database: {database_option}
+
+Generate the following:
+1. Complete project structure with all necessary files
+2. Implementation code for each file
+3. Configuration files (package.json, requirements.txt, etc.)
+4. README.md with setup and running instructions
+5. GitHub Actions workflow for testing
+6. Database schema and migrations
+7. API documentation
+8. Environment variables template
+
+Format the response as a JSON object with the following structure:
+{
+    "files": [
+        {
+            "path": "relative/path/to/file",
+            "content": "file content",
+            "description": "brief description of the file's purpose"
+        }
+    ],
+    "setup_guide": "detailed setup instructions",
+    "github_actions": "workflow yaml content"
+}
+
+Ensure all code is production-ready and follows modern development standards.
