@@ -5,7 +5,6 @@ from langchain.prompts import PromptTemplate
 import streamlit as st
 from utils.cognitive_verifier import CognitiveVerifier
 from backend.project_generator import ProjectGenerator, ProjectConfig
-import json
 from typing import Dict
 from langchain_core.output_parsers import StrOutputParser
 from langchain_groq import ChatGroq
@@ -209,6 +208,15 @@ class ProjectImplementer:
         
     #     return grouped_files
 
+from langchain_groq import ChatGroq
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+import os
+import json
+from typing import Dict, Set, List
+from collections import defaultdict
+import networkx as nx
+
 def process_file_structure(json_structure: list):
     """
     Process a JSON file structure and generate implementations using LLM.
@@ -244,7 +252,7 @@ def process_file_structure(json_structure: list):
         def _create_implementation_chain(self) -> LLMChain:
             """Create the LLM chain for file implementation"""
             implementation_prompt = PromptTemplate(
-                template="""
+                template=""" 
                 You are a senior developer tasked with implementing a specific file in a software project.
 
                 File to Implement:
@@ -277,7 +285,11 @@ def process_file_structure(json_structure: list):
                 """,
                 input_variables=["file_path", "file_details", "implemented_context"]
             )
-            return LLMChain(prompt=implementation_prompt, llm=self.llm)
+            # Ensuring the model responds in JSON format using structured output
+            return LLMChain(prompt=implementation_prompt, llm=self.llm).with_structured_output(
+                {"content": "", "imports": [], "dependencies": [], "integration_points": [], "tests_required": []}, 
+                method="json_mode"
+            )
 
         def _get_implemented_context(self, current_file: str) -> str:
             """Get context from previously implemented files"""
@@ -290,8 +302,8 @@ def process_file_structure(json_structure: list):
                     context_parts.append(f"""
                     File: {file_path}
                     Content Summary: {details.get('content', '')[:200]}...
-                    Imports: {', '.join(details.get('imports', []))}
-                    Integration Points: {', '.join(details.get('integration_points', []))}
+                    Imports: {', '.join(details.get('imports', []))} 
+                    Integration Points: {', '.join(details.get('integration_points', []))} 
                     """)
             return "\n".join(context_parts)
 
@@ -306,6 +318,7 @@ def process_file_structure(json_structure: list):
                     "implemented_context": self._get_implemented_context(file_path)
                 })
                 
+                # Parse the structured JSON output
                 implementation = json.loads(implementation_json)
                 self.implemented_files[file_path] = implementation
                 return implementation
@@ -383,6 +396,7 @@ def process_file_structure(json_structure: list):
             return {}
 
     return process_structure(json_structure)
+
 
 def initialize_session_state():
     """Initialize session state variables if they don't exist"""
