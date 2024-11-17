@@ -209,7 +209,7 @@ class ProjectImplementer:
         
     #     return grouped_files
 
-def process_file_structure(json_structure: str):
+def process_file_structure(json_structure: list):
     """
     Process a JSON file structure and generate implementations using LLM.
     
