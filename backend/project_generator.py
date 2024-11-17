@@ -40,7 +40,7 @@ class ProjectConfig:
 class ProjectGenerator:
     def __init__(self):
         self.template_configs = {
-            "Static Website": {
+            "HTML/CSS/JS(Vanilla)": {
                 "structure": ["public", "assets", "css", "js", "images"],
                 "files": {
                     "index.html": self._generate_static_html,
@@ -48,105 +48,105 @@ class ProjectGenerator:
                     "js/main.js": self._generate_js
                 }
             },
-            "React": {
-                "structure": [
-                    "src/components", "src/pages", "src/hooks", "src/context",
-                    "src/assets", "src/styles", "src/utils", "src/services",
-                    "public"
-                ],
-                "files": {
-                    "src/App.jsx": self._generate_react_app,
-                    "src/index.jsx": self._generate_react_index,
-                    "vite.config.js": self._generate_vite_config,
-                    "package.json": self._generate_react_package_json,
-                    "tailwind.config.js": self._generate_tailwind_config,
-                    "postcss.config.js": self._generate_postcss_config
-                }
-            },
-            "Vue.js": {
-                "structure": [
-                    "src/components", "src/views", "src/router", "src/store",
-                    "src/assets", "src/styles", "src/utils", "src/services",
-                    "public"
-                ],
-                "files": {
-                    "src/App.vue": self._generate_vue_app,
-                    "src/main.js": self._generate_vue_main,
-                    "vue.config.js": self._generate_vue_config,
-                    "package.json": self._generate_vue_package_json
-                }
-            },
-            "Next.js": {
-                "structure": [
-                    "pages", "components", "styles", "public", "lib",
-                    "hooks", "context", "utils", "services"
-                ],
-                "files": {
-                    "pages/_app.js": self._generate_nextjs_app,
-                    "pages/index.js": self._generate_nextjs_index,
-                    "next.config.js": self._generate_nextjs_config,
-                    "package.json": self._generate_nextjs_package_json
-                }
-            }
+            # "React": {
+            #     "structure": [
+            #         "src/components", "src/pages", "src/hooks", "src/context",
+            #         "src/assets", "src/styles", "src/utils", "src/services",
+            #         "public"
+            #     ],
+            #     "files": {
+            #         "src/App.jsx": self._generate_react_app,
+            #         "src/index.jsx": self._generate_react_index,
+            #         "vite.config.js": self._generate_vite_config,
+            #         "package.json": self._generate_react_package_json,
+            #         "tailwind.config.js": self._generate_tailwind_config,
+            #         "postcss.config.js": self._generate_postcss_config
+            #     }
+            # },
+            # "Vue.js": {
+            #     "structure": [
+            #         "src/components", "src/views", "src/router", "src/store",
+            #         "src/assets", "src/styles", "src/utils", "src/services",
+            #         "public"
+            #     ],
+            #     "files": {
+            #         "src/App.vue": self._generate_vue_app,
+            #         "src/main.js": self._generate_vue_main,
+            #         "vue.config.js": self._generate_vue_config,
+            #         "package.json": self._generate_vue_package_json
+            #     }
+            # },
+            # "Next.js": {
+            #     "structure": [
+            #         "pages", "components", "styles", "public", "lib",
+            #         "hooks", "context", "utils", "services"
+            #     ],
+            #     "files": {
+            #         "pages/_app.js": self._generate_nextjs_app,
+            #         "pages/index.js": self._generate_nextjs_index,
+            #         "next.config.js": self._generate_nextjs_config,
+            #         "package.json": self._generate_nextjs_package_json
+            #     }
+            # }
         }
 
         self.backend_configs = {
-            "Node.js/Express": {
-                "structure": [
-                    "src/routes", "src/controllers", "src/models",
-                    "src/middleware", "src/services", "src/utils",
-                    "src/config"
-                ],
-                "files": {
-                    "src/app.js": self._generate_express_app,
-                    "src/server.js": self._generate_express_server,
-                    "package.json": self._generate_express_package_json
-                }
-            },
-            "Django": {
-                "structure": [
-                    "project_name", "project_name/apps",
-                    "project_name/static", "project_name/templates",
-                    "project_name/media"
-                ],
-                "files": {
-                    "manage.py": self._generate_django_manage,
-                    "requirements.txt": self._generate_django_requirements,
-                    "project_name/settings.py": self._generate_django_settings
-                }
-            },
-            "FastAPI": {
-                "structure": [
-                    "app", "app/api", "app/core", "app/models",
-                    "app/schemas", "app/services", "app/tests"
-                ],
-                "files": {
-                    "app/main.py": self._generate_fastapi_main,
-                    "requirements.txt": self._generate_fastapi_requirements,
-                    "Dockerfile": self._generate_fastapi_dockerfile
-                }
-            }
+            # "Node.js/Express": {
+            #     "structure": [
+            #         "src/routes", "src/controllers", "src/models",
+            #         "src/middleware", "src/services", "src/utils",
+            #         "src/config"
+            #     ],
+            #     "files": {
+            #         "src/app.js": self._generate_express_app,
+            #         "src/server.js": self._generate_express_server,
+            #         "package.json": self._generate_express_package_json
+            #     }
+            # },
+            # "Django": {
+            #     "structure": [
+            #         "project_name", "project_name/apps",
+            #         "project_name/static", "project_name/templates",
+            #         "project_name/media"
+            #     ],
+            #     "files": {
+            #         "manage.py": self._generate_django_manage,
+            #         "requirements.txt": self._generate_django_requirements,
+            #         "project_name/settings.py": self._generate_django_settings
+            #     }
+            # },
+            # "FastAPI": {
+            #     "structure": [
+            #         "app", "app/api", "app/core", "app/models",
+            #         "app/schemas", "app/services", "app/tests"
+            #     ],
+            #     "files": {
+            #         "app/main.py": self._generate_fastapi_main,
+            #         "requirements.txt": self._generate_fastapi_requirements,
+            #         "Dockerfile": self._generate_fastapi_dockerfile
+            #     }
+            # }
         }
 
         self.database_configs = {
-            "PostgreSQL": {
-                "files": {
-                    "migrations/init.sql": self._generate_postgres_init,
-                    "src/config/database.js": self._generate_postgres_config
-                }
-            },
-            "MongoDB": {
-                "files": {
-                    "src/config/database.js": self._generate_mongodb_config,
-                    "src/models/schema.js": self._generate_mongodb_schema
-                }
-            },
-            "MySQL": {
-                "files": {
-                    "migrations/init.sql": self._generate_mysql_init,
-                    "src/config/database.js": self._generate_mysql_config
-                }
-            }
+            # "PostgreSQL": {
+            #     "files": {
+            #         "migrations/init.sql": self._generate_postgres_init,
+            #         "src/config/database.js": self._generate_postgres_config
+            #     }
+            # },
+            # "MongoDB": {
+            #     "files": {
+            #         "src/config/database.js": self._generate_mongodb_config,
+            #         "src/models/schema.js": self._generate_mongodb_schema
+            #     }
+            # },
+            # "MySQL": {
+            #     "files": {
+            #         "migrations/init.sql": self._generate_mysql_init,
+            #         "src/config/database.js": self._generate_mysql_config
+            #     }
+            # }
         }
 
     def generate_project(self, config: ProjectConfig, implementation_details: str) -> Optional[Dict]:
@@ -191,6 +191,7 @@ class ProjectGenerator:
 
     def _generate_frontend_files(self, base_path: Path, config: ProjectConfig):
         """Generate frontend-specific files"""
+        print(config.frontend)
         if config.frontend in self.template_configs:
             template = self.template_configs[config.frontend]
             
@@ -234,8 +235,8 @@ class ProjectGenerator:
         self._write_file(base_path / ".env.example", env_vars)
         
         # Generate gitignore
-        gitignore = self._generate_gitignore(config)
-        self._write_file(base_path / ".gitignore", gitignore)
+        # gitignore = self._generate_gitignore(config)
+        # self._write_file(base_path / ".gitignore", gitignore)
         
         # Generate package.json if needed
         if config.frontend in ["React", "Vue.js", "Next.js"] or config.backend == "Node.js/Express":
@@ -309,7 +310,7 @@ export default App;"""
     def _write_file(path: Path, content: str):
         """Helper method to write file content"""
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content)
+        path.write_text(content, encoding='utf-8')
 
     @staticmethod
     def _write_json(path: Path, content: dict):
@@ -720,416 +721,416 @@ export default App;"""
 
     module.exports = app;"""
 
-def _generate_express_server(self, config: ProjectConfig) -> str:
-    """Generate Express server.js file"""
-    return """const app = require('./app');
-require('dotenv').config();
+    def _generate_express_server(self, config: ProjectConfig) -> str:
+        """Generate Express server.js file"""
+        return """const app = require('./app');
+    require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || 'localhost';
+    const PORT = process.env.PORT || 3000;
+    const HOST = process.env.HOST || 'localhost';
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://${HOST}:${PORT}`);
-});"""
+    app.listen(PORT, () => {
+        console.log(`Server running at http://${HOST}:${PORT}`);
+    });"""
 
-def _generate_express_package_json(self, config: ProjectConfig) -> str:
-    """Generate package.json for Express projects"""
-    return """{
-    "name": "%s",
-    "version": "1.0.0",
-    "description": "Express.js backend for %s",
-    "main": "src/server.js",
-    "scripts": {
-        "start": "node src/server.js",
-        "dev": "nodemon src/server.js",
-        "test": "jest"
-    },
-    "dependencies": {
-        "compression": "^1.7.4",
-        "cors": "^2.8.5",
-        "dotenv": "^16.0.3",
-        "express": "^4.18.2",
-        "helmet": "^6.0.1"
-    },
-    "devDependencies": {
-        "jest": "^29.4.3",
-        "nodemon": "^2.0.20"
-    }
-}""" % (config.name, config.name)
+    def _generate_express_package_json(self, config: ProjectConfig) -> str:
+        """Generate package.json for Express projects"""
+        return """{
+        "name": "%s",
+        "version": "1.0.0",
+        "description": "Express.js backend for %s",
+        "main": "src/server.js",
+        "scripts": {
+            "start": "node src/server.js",
+            "dev": "nodemon src/server.js",
+            "test": "jest"
+        },
+        "dependencies": {
+            "compression": "^1.7.4",
+            "cors": "^2.8.5",
+            "dotenv": "^16.0.3",
+            "express": "^4.18.2",
+            "helmet": "^6.0.1"
+        },
+        "devDependencies": {
+            "jest": "^29.4.3",
+            "nodemon": "^2.0.20"
+        }
+    }""" % (config.name, config.name)
 
-def _generate_express_server(self, config: ProjectConfig) -> str:
-    """Generate Express server.js file"""
-    return """const app = require('./app');
-require('dotenv').config();
+    def _generate_express_server(self, config: ProjectConfig) -> str:
+        """Generate Express server.js file"""
+        return """const app = require('./app');
+    require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || 'localhost';
+    const PORT = process.env.PORT || 3000;
+    const HOST = process.env.HOST || 'localhost';
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://${HOST}:${PORT}`);
-});"""
+    app.listen(PORT, () => {
+        console.log(`Server running at http://${HOST}:${PORT}`);
+    });"""
 
-def _generate_django_manage(self, config: ProjectConfig) -> str:
-    """Generate Django manage.py file"""
-    return """#!/usr/bin/env python
-import os
-import sys
+    def _generate_django_manage(self, config: ProjectConfig) -> str:
+        """Generate Django manage.py file"""
+        return """#!/usr/bin/env python
+    import os
+    import sys
 
-def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.settings')
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
-        ) from exc
-    execute_from_command_line(sys.argv)
+    def main():
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.settings')
+        try:
+            from django.core.management import execute_from_command_line
+        except ImportError as exc:
+            raise ImportError(
+                "Couldn't import Django. Are you sure it's installed and "
+                "available on your PYTHONPATH environment variable? Did you "
+                "forget to activate a virtual environment?"
+            ) from exc
+        execute_from_command_line(sys.argv)
 
-if __name__ == '__main__':
-    main()"""
+    if __name__ == '__main__':
+        main()"""
 
-def _generate_django_requirements(self, config: ProjectConfig) -> str:
-    """Generate Django requirements.txt file"""
-    return """Django>=4.2.0
-djangorestframework>=3.14.0
-django-cors-headers>=4.0.0
-python-dotenv>=1.0.0
-psycopg2-binary>=2.9.6
-gunicorn>=20.1.0"""
+    def _generate_django_requirements(self, config: ProjectConfig) -> str:
+        """Generate Django requirements.txt file"""
+        return """Django>=4.2.0
+    djangorestframework>=3.14.0
+    django-cors-headers>=4.0.0
+    python-dotenv>=1.0.0
+    psycopg2-binary>=2.9.6
+    gunicorn>=20.1.0"""
 
-def _generate_django_settings(self, config: ProjectConfig) -> str:
-    """Generate Django settings.py file"""
-    return """import os
-from pathlib import Path
-from dotenv import load_dotenv
+    def _generate_django_settings(self, config: ProjectConfig) -> str:
+        """Generate Django settings.py file"""
+        return """import os
+    from pathlib import Path
+    from dotenv import load_dotenv
 
-load_dotenv()
+    load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
+    DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'corsheaders',
-]
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'rest_framework',
+        'corsheaders',
+    ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    MIDDLEWARE = [
+        'django.middleware.security.SecurityMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ]
 
-ROOT_URLCONF = 'project_name.urls'
-WSGI_APPLICATION = 'project_name.wsgi.application'
+    ROOT_URLCONF = 'project_name.urls'
+    WSGI_APPLICATION = 'project_name.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-STATIC_URL = 'static/'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'"""
-
-def _generate_fastapi_main(self, config: ProjectConfig) -> str:
-    """Generate FastAPI main.py file"""
-    return """from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI(
-    title="FastAPI Backend",
-    description="API Documentation",
-    version="1.0.0"
-)
-
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the API"}"""
-
-def _generate_fastapi_requirements(self, config: ProjectConfig) -> str:
-    """Generate FastAPI requirements.txt file"""
-    return """fastapi>=0.95.0
-uvicorn>=0.21.0
-python-dotenv>=1.0.0
-sqlalchemy>=2.0.0
-pydantic>=1.10.0
-alembic>=1.10.0"""
-
-def _generate_fastapi_dockerfile(self, config: ProjectConfig) -> str:
-    """Generate FastAPI Dockerfile"""
-    return """FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]"""
-
-
-def _generate_postgres_init(self, config: ProjectConfig) -> str:
-    """Generate initial PostgreSQL migration file"""
-    return """-- Initial database schema
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Add your table definitions here
-"""
-
-def _generate_postgres_config(self, config: ProjectConfig) -> str:
-    """Generate PostgreSQL configuration file"""
-    return """const { Pool } = require('pg');
-require('dotenv').config();
-
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-});
-
-module.exports = pool;
-"""
-
-def _generate_mongodb_config(self, config: ProjectConfig) -> str:
-    """Generate MongoDB configuration file"""
-    return """const mongoose = require('mongoose');
-require('dotenv').config();
-
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log('MongoDB connected successfully');
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
-    }
-};
-
-module.exports = connectDB;
-"""
-
-def _generate_mongodb_schema(self, config: ProjectConfig) -> str:
-    """Generate MongoDB schema file"""
-    return """const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
-
-module.exports = mongoose.model('User', userSchema);
-"""
-
-def _generate_mysql_init(self, config: ProjectConfig) -> str:
-    """Generate initial MySQL migration file"""
-    return """-- Initial database schema
-CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Add your table definitions here
-"""
-
-def _generate_mysql_config(self, config: ProjectConfig) -> str:
-    """Generate MySQL configuration file"""
-    return """const mysql = require('mysql2');
-require('dotenv').config();
-
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
-
-module.exports = pool.promise();
-"""
-
-def _generate_implementation_files(self, base_path: Path, implementation_details: str) -> None:
-    """Generate implementation-specific files based on provided details"""
-    try:
-        details = json.loads(implementation_details)
-        for file_info in details:
-            file_path = base_path / file_info['path']
-            content = file_info['content']
-            self._write_file(file_path, content)
-    except json.JSONDecodeError:
-        print("Invalid implementation details format")
-    except KeyError:
-        print("Missing required implementation details")
-
-def _generate_docker_compose(self, config: ProjectConfig) -> str:
-    """Generate docker-compose.yml file"""
-    services = {
-        "app": {
-            "build": ".",
-            "ports": ["3000:3000"],
-            "environment": [
-                "NODE_ENV=development"
-            ],
-            "volumes": ["./:/app"],
-            "depends_on": []
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    
-    if config.database == "PostgreSQL":
-        services["postgres"] = {
-            "image": "postgres:latest",
-            "environment": [
-                "POSTGRES_USER=postgres",
-                "POSTGRES_PASSWORD=postgres",
-                "POSTGRES_DB=app"
-            ],
-            "ports": ["5432:5432"]
-        }
-        services["app"]["depends_on"].append("postgres")
-    
-    elif config.database == "MongoDB":
-        services["mongodb"] = {
-            "image": "mongo:latest",
-            "ports": ["27017:27017"]
-        }
-        services["app"]["depends_on"].append("mongodb")
-    
-    return f"""version: '3.8'
 
-services:
-  {yaml.dump(services, default_flow_style=False)}"""
+    STATIC_URL = 'static/'
+    DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'"""
 
-def _generate_vercel_config(self, config: ProjectConfig) -> dict:
-    """Generate Vercel configuration"""
-    return {
-        "version": 2,
-        "builds": [
-            {
-                "src": "package.json",
-                "use": "@vercel/node"
+    def _generate_fastapi_main(self, config: ProjectConfig) -> str:
+        """Generate FastAPI main.py file"""
+        return """from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+
+    app = FastAPI(
+        title="FastAPI Backend",
+        description="API Documentation",
+        version="1.0.0"
+    )
+
+    # Configure CORS
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    @app.get("/")
+    async def root():
+        return {"message": "Welcome to the API"}"""
+
+    def _generate_fastapi_requirements(self, config: ProjectConfig) -> str:
+        """Generate FastAPI requirements.txt file"""
+        return """fastapi>=0.95.0
+    uvicorn>=0.21.0
+    python-dotenv>=1.0.0
+    sqlalchemy>=2.0.0
+    pydantic>=1.10.0
+    alembic>=1.10.0"""
+
+    def _generate_fastapi_dockerfile(self, config: ProjectConfig) -> str:
+        """Generate FastAPI Dockerfile"""
+        return """FROM python:3.9-slim
+
+    WORKDIR /app
+
+    COPY requirements.txt .
+    RUN pip install --no-cache-dir -r requirements.txt
+
+    COPY . .
+
+    CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]"""
+
+
+    def _generate_postgres_init(self, config: ProjectConfig) -> str:
+        """Generate initial PostgreSQL migration file"""
+        return """-- Initial database schema
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Add your table definitions here
+    """
+
+    def _generate_postgres_config(self, config: ProjectConfig) -> str:
+        """Generate PostgreSQL configuration file"""
+        return """const { Pool } = require('pg');
+    require('dotenv').config();
+
+    const pool = new Pool({
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+    });
+
+    module.exports = pool;
+    """
+
+    def _generate_mongodb_config(self, config: ProjectConfig) -> str:
+        """Generate MongoDB configuration file"""
+        return """const mongoose = require('mongoose');
+    require('dotenv').config();
+
+    const connectDB = async () => {
+        try {
+            await mongoose.connect(process.env.MONGODB_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            });
+            console.log('MongoDB connected successfully');
+        } catch (error) {
+            console.error('MongoDB connection error:', error);
+            process.exit(1);
+        }
+    };
+
+    module.exports = connectDB;
+    """
+
+    def _generate_mongodb_schema(self, config: ProjectConfig) -> str:
+        """Generate MongoDB schema file"""
+        return """const mongoose = require('mongoose');
+
+    const userSchema = new mongoose.Schema({
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+    });
+
+    module.exports = mongoose.model('User', userSchema);
+    """
+
+    def _generate_mysql_init(self, config: ProjectConfig) -> str:
+        """Generate initial MySQL migration file"""
+        return """-- Initial database schema
+    CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+    -- Add your table definitions here
+    """
+
+    def _generate_mysql_config(self, config: ProjectConfig) -> str:
+        """Generate MySQL configuration file"""
+        return """const mysql = require('mysql2');
+    require('dotenv').config();
+
+    const pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0
+    });
+
+    module.exports = pool.promise();
+    """
+
+    def _generate_implementation_files(self, base_path: Path, implementation_details: str) -> None:
+        """Generate implementation-specific files based on provided details"""
+        try:
+            details = json.loads(implementation_details)
+            for file_info in details:
+                file_path = base_path / file_info['path']
+                content = file_info['content']
+                self._write_file(file_path, content)
+        except json.JSONDecodeError:
+            print("Invalid implementation details format")
+        except KeyError:
+            print("Missing required implementation details")
+
+    def _generate_docker_compose(self, config: ProjectConfig) -> str:
+        """Generate docker-compose.yml file"""
+        services = {
+            "app": {
+                "build": ".",
+                "ports": ["3000:3000"],
+                "environment": [
+                    "NODE_ENV=development"
+                ],
+                "volumes": ["./:/app"],
+                "depends_on": []
             }
-        ],
-        "routes": [
-            {
-                "src": "/(.*)",
-                "dest": "/"
+        }
+        
+        if config.database == "PostgreSQL":
+            services["postgres"] = {
+                "image": "postgres:latest",
+                "environment": [
+                    "POSTGRES_USER=postgres",
+                    "POSTGRES_PASSWORD=postgres",
+                    "POSTGRES_DB=app"
+                ],
+                "ports": ["5432:5432"]
             }
-        ]
-    }
+            services["app"]["depends_on"].append("postgres")
+        
+        elif config.database == "MongoDB":
+            services["mongodb"] = {
+                "image": "mongo:latest",
+                "ports": ["27017:27017"]
+            }
+            services["app"]["depends_on"].append("mongodb")
+        
+        return f"""version: '3.8'
 
-def _generate_netlify_config(self, config: ProjectConfig) -> str:
-    """Generate Netlify configuration"""
-    return """[build]
-  command = "npm run build"
-  publish = "dist"
+    services:
+    {yaml.dump(services, default_flow_style=False)}"""
 
-[dev]
-  command = "npm run dev"
-  port = 3000
+    def _generate_vercel_config(self, config: ProjectConfig) -> dict:
+        """Generate Vercel configuration"""
+        return {
+            "version": 2,
+            "builds": [
+                {
+                    "src": "package.json",
+                    "use": "@vercel/node"
+                }
+            ],
+            "routes": [
+                {
+                    "src": "/(.*)",
+                    "dest": "/"
+                }
+            ]
+        }
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-"""
+    def _generate_netlify_config(self, config: ProjectConfig) -> str:
+        """Generate Netlify configuration"""
+        return """[build]
+    command = "npm run build"
+    publish = "dist"
 
-def _generate_api_docs(self, config: ProjectConfig) -> str:
-    """Generate API documentation"""
-    return f"""# API Documentation
+    [dev]
+    command = "npm run dev"
+    port = 3000
 
-## Overview
-This document provides documentation for the {config.name} API.
+    [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+    """
 
-## Authentication
-{self._get_auth_docs(config)}
+    def _generate_api_docs(self, config: ProjectConfig) -> str:
+        """Generate API documentation"""
+        return f"""# API Documentation
 
-## Endpoints
+    ## Overview
+    This document provides documentation for the {config.name} API.
 
-### Users
-- `GET /api/users`
-  - List all users
-  - Requires authentication
+    ## Authentication
+    {self._get_auth_docs(config)}
 
-- `POST /api/users`
-  - Create a new user
-  - Public endpoint
+    ## Endpoints
 
-### Authentication
-- `POST /api/auth/login`
-  - User login
-  - Returns JWT token
+    ### Users
+    - `GET /api/users`
+    - List all users
+    - Requires authentication
 
-- `POST /api/auth/register`
-  - User registration
-  - Creates new user account
+    - `POST /api/users`
+    - Create a new user
+    - Public endpoint
 
-## Error Handling
-All endpoints follow standard HTTP status codes and return JSON responses.
+    ### Authentication
+    - `POST /api/auth/login`
+    - User login
+    - Returns JWT token
 
-## Rate Limiting
-API requests are limited to 100 requests per minute per IP address.
-"""
+    - `POST /api/auth/register`
+    - User registration
+    - Creates new user account
 
-def _get_auth_docs(self, config: ProjectConfig) -> str:
-    """Generate authentication documentation based on config"""
-    if config.authentication == "JWT":
-        return """Authentication is handled via JWT tokens.
-Include the token in the Authorization header:
-`Authorization: Bearer <token>`"""
-    elif config.authentication == "OAuth":
-        return """Authentication is handled via OAuth 2.0.
-Follow the standard OAuth flow to obtain access tokens."""
-    else:
-        return "No authentication required for public endpoints."
+    ## Error Handling
+    All endpoints follow standard HTTP status codes and return JSON responses.
+
+    ## Rate Limiting
+    API requests are limited to 100 requests per minute per IP address.
+    """
+
+    def _get_auth_docs(self, config: ProjectConfig) -> str:
+        """Generate authentication documentation based on config"""
+        if config.authentication == "JWT":
+            return """Authentication is handled via JWT tokens.
+    Include the token in the Authorization header:
+    `Authorization: Bearer <token>`"""
+        elif config.authentication == "OAuth":
+            return """Authentication is handled via OAuth 2.0.
+    Follow the standard OAuth flow to obtain access tokens."""
+        else:
+            return "No authentication required for public endpoints."

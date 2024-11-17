@@ -190,7 +190,7 @@ def select_technology_stack():
                 "Frontend Framework/Library",
                 [
                     "None",  # Added None option
-                    "HTML/CSS/JS (Vanilla)",  # Basic option
+                    "HTML/CSS/JS(Vanilla)",  # Basic option
                     "React",
                     "Vue.js",
                     "Angular",
@@ -450,6 +450,7 @@ def generate_initial_prompt(project_data: Dict) -> str:
         3. Core Features and Functionality
         4. Project Structure Overview
         5. Development Guidelines
+        6. Architecture Diagram
 
         Focus on creating a clear, actionable prompt that will guide the development process.
         """,
@@ -458,7 +459,7 @@ def generate_initial_prompt(project_data: Dict) -> str:
                         "description", "requirements"]
     )
     
-    llm = ChatGroq(api_key=os.getenv("GROQ_API_KEY"), model="mixtral-8x7b-32768")
+    llm = ChatGroq(api_key=os.getenv("GROQ_API_KEY"), model="llama-3.1-70b-versatile")
     chain = LLMChain(prompt=prompt_template, llm=llm)
     
     return chain.run({
@@ -475,16 +476,17 @@ def generate_initial_prompt(project_data: Dict) -> str:
     })
 
 def generate_final_project():
-    """Generate the final project files using two-step LLM process and DynamicProjectGenerator"""
+    """Generate the final project files using epic-based LLM process"""
     from langchain_groq import ChatGroq
     from langchain.chains import LLMChain
     from langchain.prompts import PromptTemplate
     import os
-    
-    # LLM2 Prompt Template (For implementation details)
-    implementation_prompt = PromptTemplate(
+    import json
+    from typing import Dict, List
+
+    epic_creation_prompt = PromptTemplate(
         template="""
-        You are a senior software architect tasked with generating a complete project implementation.
+        You are a senior technical product manager tasked with breaking down a project into implementable epics.
 
         Project Requirements:
         {prompt}
@@ -497,36 +499,135 @@ def generate_final_project():
         - Authentication: {authentication}
         - Additional Features: {features}
 
-        Based on the above, create a complete project implementation that includes:
-        1. Complete project structure
-        2. Key implementation files
-        3. Configuration setup
-        4. Database schema
-        5. API endpoints
-        6. Deployment instructions
+        Create a complete breakdown of the project into epics. For each epic, include:
+        
+        1. Files that need to be created or modified
+        
 
-        Ensure all code is production-ready and follows modern development standards.
+        Format the response as a JSON array of epics, each with the above fields.
+        Ensure epics are ordered by dependencies (independent epics first).
         """,
         input_variables=["prompt", "frontend", "ui_library", "backend", 
                         "database", "authentication", "features"]
     )
-    
-    # Initialize LLM for implementation generation
-    llm = ChatGroq(api_key=os.getenv("GROQ_API_KEY"), model="mixtral-8x7b-32768")
-    chain = LLMChain(prompt=implementation_prompt, llm=llm)
-    
-    # Generate implementation details using the approved prompt
-    implementation_details = chain.run({
-        "prompt": st.session_state.approved_prompt,
-        "frontend": st.session_state.project_data["frontend"],
-        "ui_library": st.session_state.project_data["ui_library"],
-        "backend": st.session_state.project_data["backend"],
-        "database": st.session_state.project_data["database"],
-        "authentication": st.session_state.project_data["authentication"],
-        "features": ", ".join(st.session_state.project_data.get("additional_features", []))
-    })
-    
-    # Create project configuration with all required fields
+
+    epic_implementation_prompt = PromptTemplate(
+        template="""
+        You are a senior developer implementing a specific epic in the project.
+
+        Project Context:
+        {project_context}
+
+        Technical Stack:
+        - Frontend: {frontend}
+        - UI Library: {ui_library}
+        - Backend: {backend}
+        - Database: {database}
+        - Authentication: {authentication}
+        - Additional Features: {features}
+
+        Current Epic:
+        {epic_details}
+
+        Previously Implemented Files:
+        {previous_files}
+
+        Implementation Requirements:
+        1. Create or modify all files needed for this epic
+        2. Ensure compatibility with previously implemented files
+        3. Follow project architecture and patterns
+        4. Include comprehensive error handling
+        5. Add detailed documentation
+        6. Consider all dependencies
+
+        For each file, provide:
+        1. Complete file content
+        2. Purpose and relationship to the epic
+        3. Integration points with other files
+        4. Any configuration or setup required
+
+        Format the response as a JSON object with file paths as keys and implementation details as values.
+        """,
+        input_variables=["project_context", "frontend", "ui_library", "backend", 
+                        "database", "authentication", "features", "epic_details", 
+                        "previous_files"]
+    )
+
+    class ProjectImplementer:
+        def __init__(self):
+            self.llm = ChatGroq(api_key=os.getenv("GROQ_API_KEY"), 
+                              model="llama-3.1-70b-versatile")
+            self.epic_creation_chain = LLMChain(prompt=epic_creation_prompt, 
+                                              llm=self.llm)
+            self.epic_implementation_chain = LLMChain(prompt=epic_implementation_prompt, 
+                                                    llm=self.llm)
+            self.implemented_files: Dict[str, dict] = {}
+
+        def create_epics(self, project_data: dict) -> List[dict]:
+            """Generate project epics"""
+            epics_json = self.epic_creation_chain.run({
+                "prompt": st.session_state.approved_prompt,
+                "frontend": project_data["frontend"],
+                "ui_library": project_data["ui_library"],
+                "backend": project_data["backend"],
+                "database": project_data["database"],
+                "authentication": project_data["authentication"],
+                "features": ", ".join(project_data.get("additional_features", []))
+            })
+            print(epics_json)
+            return json.loads(epics_json)
+
+        def format_previous_files(self) -> str:
+            """Format previously implemented files for context"""
+            if not self.implemented_files:
+                return "No files implemented yet."
+            
+            formatted_files = []
+            for file_path, details in self.implemented_files.items():
+                formatted_files.append(f"""
+                File: {file_path}
+                Purpose: {details.get('purpose', 'N/A')}
+                Key Components: {details.get('key_components', 'N/A')}
+                Integration Points: {details.get('integration_points', 'N/A')}
+                """)
+            return "\n".join(formatted_files)
+
+        def implement_epic(self, epic: dict, project_data: dict) -> Dict[str, dict]:
+            """Implement a single epic"""
+            implementation_json = self.epic_implementation_chain.run({
+                "project_context": st.session_state.approved_prompt,
+                "frontend": project_data["frontend"],
+                "ui_library": project_data["ui_library"],
+                "backend": project_data["backend"],
+                "database": project_data["database"],
+                "authentication": project_data["authentication"],
+                "features": ", ".join(project_data.get("additional_features", [])),
+                "epic_details": json.dumps(epic, indent=2),
+                "previous_files": self.format_previous_files()
+            })
+            
+            new_files = json.loads(implementation_json)
+            self.implemented_files.update(new_files)
+            print(new_files)
+            return new_files
+
+        def implement_project(self, project_data: dict) -> Dict[str, dict]:
+            """Implement the complete project epic by epic"""
+            epics = self.create_epics(project_data)
+            
+            all_files = {}
+            for epic in epics:
+                st.write(f"Implementing epic: {epic['title']}")
+                epic_files = self.implement_epic(epic, project_data)
+                all_files.update(epic_files)
+            
+            return all_files
+
+    # Main execution
+    implementer = ProjectImplementer()
+    implemented_files = implementer.implement_project(st.session_state.project_data)
+
+    # Create project configuration
     config = ProjectConfig(
         name=st.session_state.project_data["name"],
         project_type=st.session_state.project_data["project_type"],
@@ -545,10 +646,24 @@ def generate_final_project():
         cache_service=st.session_state.project_data.get("cache_service", "None"),
         cms=st.session_state.project_data.get("cms", "None")
     )
+
+    # Prepare files for ProjectGenerator
+    files_for_generator = []
+    for file_path, details in implemented_files.items():
+        files_for_generator.append({
+            "path": file_path,
+            "content": details["content"],
+            "purpose": details.get("purpose", ""),
+            "key_components": details.get("key_components", []),
+            "integration_points": details.get("integration_points", [])
+        })
+
+    implementation_details = {
+        "files": files_for_generator
+    }
     
-    # Initialize and use the project generator
     generator = ProjectGenerator()
-    result = generator.generate_project(config, implementation_details)
+    result = generator.generate_project(config, json.dumps(implementation_details, indent=4))
     
     if result:
         with st.expander("Project Structure"):

@@ -7,7 +7,7 @@ class CognitiveVerifier:
     def __init__(self):
         self.llm = ChatGroq(
             api_key=os.getenv("GROQ_API_KEY"),
-            model="gemma-7b-it"
+            model="llama-3.1-70b-versatile"
         )
         
         self.stack_recommendation_template = PromptTemplate(
@@ -27,6 +27,7 @@ class CognitiveVerifier:
             5. Deployment Strategy
             
             For each recommendation, provide a brief justification.
+        
             """,
             input_variables=["project_type", "description", "requirements", "scale"]
         )
@@ -45,6 +46,7 @@ class CognitiveVerifier:
             2. Performance implications
             3. Development complexity
             4. Recommended adjustments
+            Also draw a architecture diagram.
             """,
             input_variables=["frontend", "ui_library", "backend", "database", "auth_method"]
         )
