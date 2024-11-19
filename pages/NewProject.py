@@ -37,10 +37,15 @@ class ProjectImplementer:
             api_key=os.getenv("GROQ_API_KEY"),
             model="llama-3.1-70b-versatile"
         )
+        self.file_generation_llm = ChatGroq(
+            api_key=os.getenv("GROQ_API_KEY"),
+            model="llama-3.1-70b-versatile"
+        )
+        self.file_context = {}
 
     def create_epic_generation_chain(self):
         """Create LCEL chain for generating project epics"""
-        # Use Pydantic output parser for strict JSON structure
+        # Previous implementation remains the same
         pydantic_parser = PydanticOutputParser(pydantic_object=ProjectEpics)
 
         epic_creation_prompt = ChatPromptTemplate.from_template(
@@ -79,24 +84,117 @@ class ProjectImplementer:
             | self.llm
             | pydantic_parser
         )
+
+    def create_file_generation_chain(self, file_path: str, project_context: dict):
+        """Create chain for generating individual files with context"""
+        file_prompt = ChatPromptTemplate.from_template(
+            "You are a senior software developer implementing a specific file in a larger project.\n"
+            "Project Context:\n"
+            "Name: {project_name}\n"
+            "Description: {project_description}\n\n"
+            "Technical Stack:\n"
+            "- Frontend: {frontend}\n"
+            "- UI Library: {ui_library}\n"
+            "- Backend: {backend}\n"
+            "- Database: {database}\n\n"
+            "Related Epics:\n{related_epics}\n\n"
+            "Previously Generated Files:\n{previous_files}\n\n"
+            "Current File to Implement: {file_path}\n\n"
+            "Generate a complete, production-ready implementation following:\n"
+            "1. Best practices for the technology stack\n"
+            "2. Proper integration with other components\n"
+            "3. Comprehensive error handling\n"
+            "4. Clear documentation and comments\n"
+            "5. Consistent style with other files\n"
+        )
+
+        return (
+            RunnablePassthrough.assign(
+                project_name=lambda x: x['project_data']['name'],
+                project_description=lambda x: x['project_data']['description'],
+                frontend=lambda x: x['project_data']['frontend'],
+                ui_library=lambda x: x['project_data']['ui_library'],
+                backend=lambda x: x['project_data']['backend'],
+                database=lambda x: x['project_data']['database'],
+                related_epics=lambda x: self._get_related_epics(file_path, x['epics']),
+                previous_files=lambda x: self._get_previous_files_context(),
+                file_path=lambda x: file_path
+            )
+            | file_prompt
+            | self.file_generation_llm
+            | StrOutputParser()
+        )
+
+    def _get_related_epics(self, file_path: str, epics: ProjectEpics) -> str:
+        """Get epics related to the current file"""
+        related_epics = []
+        for epic in epics.epics:
+            if file_path in epic.files:
+                related_epics.append(f"- {epic.title}: {epic.description}")
+        return "\n".join(related_epics)
+
+    def _get_previous_files_context(self) -> str:
+        """Get context from previously generated files"""
+        context_entries = []
+        for path, content in self.file_context.items():
+            # Include abbreviated content to maintain relevant context
+            summary = f"File: {path}\nPurpose: {self._summarize_file(content)}\n"
+            context_entries.append(summary)
+        return "\n".join(context_entries)
+
+    def _summarize_file(self, content: str) -> str:
+        """Create a brief summary of file content"""
+        # Extract key information from file content
+        lines = content.split('\n')
+        summary_lines = []
+        
+        for line in lines:
+            if line.strip().startswith(('class ', 'def ', 'import ', '// Component:', '<!-- ')):
+                summary_lines.append(line.strip())
+        
+        return "\n".join(summary_lines[:5]) + "\n..." if len(summary_lines) > 5 else "\n".join(summary_lines)
+
     def create_epics(self, project_data: dict):
         """Generate project epics and file structure"""
         st.write("Creating project epics...")
 
-        #Generate Project Configurations
+        # Generate Project Configurations
         project_config = ProjectConfig(project_data)
-        project_generator = ProjectGenerator(project_config)        
+        project_generator = ProjectGenerator(project_config)
+        
         # Create chains
         epic_chain = self.create_epic_generation_chain()
         project_epics = epic_chain.invoke(project_data)
 
+        # Generate base project structure
         project_files = project_generator.generate_project_files()
-        enhanced_project_files = self._enhance_project_files(project_files, project_epics)   
+        
+        # Generate each file with context
+        implemented_files = {}
+        for file_path in project_files.keys():
+            try:
+                file_chain = self.create_file_generation_chain(file_path, {
+                    'project_data': project_data,
+                    'epics': project_epics
+                })
+                
+                implementation = file_chain.invoke({
+                    'project_data': project_data,
+                    'epics': project_epics
+                })
+                print(implementation)
+                implemented_files[file_path] = implementation
+                self.file_context[file_path] = implementation
+                
+                st.write(f"Generated file: {file_path}")
+            except Exception as e:
+                st.error(f"Error generating {file_path}: {str(e)}")
 
         return {
             "epics": project_epics,
-            "files": enhanced_project_files
-        }     
+            "files": implemented_files
+        }
+
 
     def _enhance_project_files(self, project_files: dict, project_epics: dict):
         """Enhance project files with epic-driven annotations"""
