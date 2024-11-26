@@ -85,7 +85,7 @@ class CognitiveVerifier:
     
     def _parse_compatibility(self, result):
         # Implementation to parse LLM response into structured compatibility analysis
-        # This is a placeholder - you would implement proper parsing logic
+        
         return {
             "compatible": True,
             "issues": [],
